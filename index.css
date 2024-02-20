@@ -1,0 +1,25 @@
+body{
+    padding: 15px;
+    
+}
+.container{
+    width: 600px;
+    box-shadow: rgba(100,100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.form-control{
+    margin-bottom: 30px;
+}
+.container form input{
+    outline: none;
+}
+.row{
+    text-align: center;
+    margin: 5px;
+    padding: 5px;
+}
+
+#container-fluid{
+    width: 100%;
+    background: grey;
+}
