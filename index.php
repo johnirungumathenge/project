@@ -168,9 +168,8 @@ $Id = $_SESSION['user']
      <div class="container mt-3">
         <h4>Lecturers Reviews</h4>
         <div class="image">
-        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-            <!-- <img src="images/student-849825.jpg" alt="image"> -->
-            <p class="btn btn-success">Weeks</p>
+        <p class="card-text">click the button to see the reviews your made by lecturers</p>
+            <a href="reviews.php" class="btn btn-success text-decoration-none">Show Reviews</a>
         </div>
     </div>
 
@@ -194,6 +193,36 @@ $Id = $_SESSION['user']
             </div>
         </div>
     </div>
+    <!-- contacts section -->
+    <div class="container mt-5">
+  <div class="row d-flex">
+    <div class="col-md-12 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Contacts</h4>
+        </div>
+        <div class="card-body d-flex justify-content-between">
+          <!-- Contact 1 -->
+          <div class="mb-3">
+            <h5>Contact Name: Admin</h5>
+            <p>Email: admin@example.com</p>
+            <p>Phone: +254 4567890</p>
+          </div>
+
+          <!-- Contact 2 -->
+          <div class="mb-3">
+            <h5>Contact Name: Student</h5>
+            <p>Email: student@example.com</p>
+            <p>Phone: +254 7654321</p>
+          </div>
+
+          <!-- Add more contacts as needed -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
     <!-- frequently asked  questions section -->
     <div class="container mt-5">

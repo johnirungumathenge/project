@@ -132,52 +132,14 @@ if(!isset($_SESSION['user'])){
         
     ?>
 </div>
-
         <!-- write a review section -->
-        <div class="container mt-5">
-            <?php
-            //connect to the database
-            require_once 'connect.php';
-            
-            if(isset($_POST['submit1'])){
-                $text = $_POST['text'];
-                $id = $row['Day'];
-                //$sql = "SELECT * FROM Request";
-                $sql ="SELECT * FROM Request join Users ON Request.users_id=Users.id WHERE Request.approve = 'approved' ";
-                $result = $conn->query($sql);
-                if($result->num_rows > 0){
-                    while($row=$result->fetch_assoc()){
-                       echo  $row['Day'];
-                       $user_id = $row['id'];
-                       
-                        $sql1 = "INSERT INTO feedback(user_id,feedback) VALUES(?,?)";
-                        //$res = $conn->query($sql1);
-                        $stmt = $conn->prepare($sql1);
-                        $stmt->bind_param("ss", $user_id, $text);
-
-                        if ($stmt->execute()) {
-                            echo "<script>alert('Data entered successfully.')</script>";
-                        } else {
-                            echo "<script>alert('Failed to enter.')</script>";
-                        }
-                       
-                    }
-                }
-                
-            }
-            //$conn->close();
-
-
-            ?>
+        <div class="container mt-5">        
         <h4>Lecturers Reviews & Feedback</h4>
         <div class="row">
-        <p class="card-text">Lecturer comments and feedback to the user</p>
-            <form method="POST"  class="form-group">
-                <textarea class="form-control" name="text" rows=6></textarea>
-                <button type="submit1" name="submit1"  class="btn btn-success mt-2">Post</button>
-            </form>
-            
-
+        <p class="card-text">Lecturer comments and feedback to the user</p>  
+       
+           <a class="btn btn-success mt-2" href="feedback.php">feedback</a>              
+                
         </div>
     </div>
 
