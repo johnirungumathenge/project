@@ -8,6 +8,11 @@
 body{
     background:lavender;
 }
+/* scroll behavior for smoothly scrolling the web page */
+html{
+    scroll-behavior: smooth;
+    scroll-padding: 7vmax;
+}
 .container-fluid{
     width: 100%;
     padding: 0;

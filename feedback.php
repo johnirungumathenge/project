@@ -1,19 +1,45 @@
 <?php
+
+session_start();
 require_once "connect.php";
 
+$lecname = $_SESSION['admin'];
 $sql ="SELECT * FROM Request join Users ON Request.users_id=Users.id WHERE Request.approve = 'approved' ";
 $result = $conn->query($sql);
 $row=$result->fetch_assoc();
 
-$id =$row['users_id'];
-if(isset($_POST['submit'])){
-    $name = $_POST['lecturer'];
-    $text = $_POST['text'];    
+//$id =$row['users_id'];
+$newId = $_GET['userid'];
 
-    $sql ="INSERT INTO feedback(user_id,lecturer,feedback) VALUES($id,'$name','$text')";
+// approve the student into the database
+// function to update the student into request table in the database
+function approveStudent($conn,$approve){
+    $newId = $_GET['userid'];
+    $sql1 = "SELECT * FROM Request WHERE users_id = '$newId' AND approve IS NULL";
+    
+    $result =mysqli_query($conn,$sql1);
+
+    if($result && mysqli_num_rows($result) > 0){
+        $updateSql ="UPDATE Request SET approve='$approve' WHERE approve IS NULL ";
+        $updateResult = mysqli_query($conn, $updateSql);
+        if($updateResult){
+            echo "student record updated successful";
+        }else{
+            echo "failed to update";
+        }
+    }   
+
+}
+if(isset($_POST['submit'])){
+    $name = $lecname;
+    $text = $_POST['text']; 
+    $newId = $_GET['userid'];   
+
+    $sql ="INSERT INTO feedback(user_id,lecturer,feedback) VALUES($newId ,'$name','$text')";
     $result = mysqli_query($conn,$sql);
 
     if($result){
+        approveStudent($conn, 'approve');
         header('Location: admin.php');
         //echo "<script>alert('success')</script>";
     }else{
@@ -22,26 +48,6 @@ if(isset($_POST['submit'])){
 }
 
 
-    // if($result->num_rows > 0){
-    //     while($row=$result->fetch_assoc()){
-    //        //$id =  $row['users_id'];
-    //        $user_id = $row['users_id'];
-           
-    //         $sql1 = "INSERT INTO feedback(user_id,lecturer, feedback) VALUES(?,?,?)";
-    //         //$res = $conn->query($sql1);
-    //         $stmt = $conn->prepare($sql1);
-    //         $stmt->bind_param("ss", $user_id, $name, $text);
-
-    //         if ($stmt->execute()) {
-    //             echo "<script>alert('Data entered successfully.')</script>";
-    //         } else {
-    //             echo "<script>alert('Failed to enter.')</script>";
-    //         }
-           
-    //     }
-    // }
-    
-//}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,12 +102,12 @@ if(isset($_POST['submit'])){
     <div class="container mt-5">
         <h1>Feedback</h1>
         <p>
-            <?php echo "the day is: ". $id; ?>
+            <?php echo "the day is: ". $newId; ?>
         </p>
         <form method="POST" class="form-control">
             <div class="form-group">
                 <label for="lecturer" class="form-label">Lecturer Name</label>
-                <input type="text" name="lecturer" class="form-control" placeholder="enter name">
+                <input type="text" name="lecturer" class="form-control" value="<?php echo $lecname; ?>" placeholder="enter name">
             </div>
             <div class="form-group">
                 <label for="lecturer" class="form-label">Feedback</label>
@@ -109,6 +115,7 @@ if(isset($_POST['submit'])){
             </div>
             <div class="form-group">
                 <button type="submit" name="submit" class="btn btn-primary mt-2">Upload Review</button>
+                <a   class="btn btn-danger mt-2">Cancel</a>
             </div>
         </form>
     </div>

@@ -36,7 +36,7 @@ if(isset($_SESSION['user'])){
                 if($user){
                     if(password_verify($password, $user['password'])){
                         session_start();
-                        $_SESSION['user'] = $userId;
+                        $_SESSION['user'] = $user['id'];
                         header("Location:index.php");
                         die();
                     }else{

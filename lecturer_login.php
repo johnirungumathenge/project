@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if(isset($_SESSION['user'])){
+if(isset($_SESSION['admin'])){
     header("Location: admin.php");
 }
 ?>
@@ -35,7 +35,8 @@ if(isset($_SESSION['user'])){
                 if($user){
                     if(password_verify($password, $user['password'])){
                         session_start();
-                        $_SESSION['user'] = "yes";
+                        // creating a lecturer session for login in
+                        $_SESSION['admin'] = $user['fullname'];
                         header("Location:admin.php");
                         die();
                     }else{

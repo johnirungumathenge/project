@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'connect.php';
 ?>
 <!DOCTYPE html>
@@ -66,20 +67,22 @@ require_once 'connect.php';
         <th scope="col"></th>
       </tr>
     </thead>
+    <tbody> 
+    
     <?php
-    //$sql ="SELECT * FROM Request join Users ON Request.users_id=Users.id WHERE Request.approve = 'approved' ";
-    $sql = "SELECT * FROM feedback JOIN Users ON  feedback.user_id = Users.id WHERE user_id=1";
-    $result = mysqli_query($conn,$sql);
+    $id =$_SESSION['user'];
+    $sql = "SELECT * FROM feedback JOIN Users ON  feedback.user_id = Users.id WHERE user_id=$id";
+    $result = mysqli_query($conn, $sql);
     // Assuming $result is the result set from your query
     while ($row = mysqli_fetch_assoc($result)) {
         $sname = $row['fullname'];
+        $ses =$_SESSION['user'];
         $id = $row['user_id'];
         $feedback = $row['feedback'];
         $date = $row['feedback_date'];
         $lecturer = $row['lecturer'];
 
         echo '      
-        <tbody>
         <tr>        
             <td>' . $sname . '</td>
             <td>' . $id . '</td>
@@ -87,24 +90,23 @@ require_once 'connect.php';
             <td>' . $feedback . '</td>
             <td>' . $date . '</td>
             <td></td>
-        </tr>
-        <!-- Add more rows as needed -->
-        </tbody>';
+        </tr>';
     }
-
     ?>
+    </tbody> 
     </table>
-
-  <!-- close button -->
-  <a class="btn btn-info text-decoration-none m-2 p-2" href="index.php">Close</a>
+    <br>
+</div>
+    <br>
+  
+</div>
+<div class="container-fluid" style="margin-top:1rem;">
+        
+    <a class="btn btn-info text-decoration-none m-2 p-2" href="index.php">Close</a>
 </div>
 
-    <!-- <footer>
-        <div class="container mb-1">
-            <p>&copy; 2024 Your Company. All rights reserved.</p>
-        </div>
-    </footer> -->
 
+<!-- CDN links to import the bootstrap 5 styling -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>

@@ -76,6 +76,7 @@ if(isset($_SESSION['user'])){
                     mysqli_stmt_execute($stmt);
                     $successMessage = "<div class='alert alert-success'> You have registered successfully </div>";
                     //echo "<div class='alert alert-success'> You have registered successfully </div>";
+                    header('Location:login.php');
                 }
                 else{
                     die("Something went wrong!" . mysqli_stmt_error($stmt));

@@ -1,14 +1,9 @@
 <?php
 session_start();
 
-// require_once 'connection.php';
-
 if(!isset($_SESSION['user'])){
     header("Location: login.php");
 }
-
-$Id = $_SESSION['user']
-
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +15,7 @@ $Id = $_SESSION['user']
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 
-    <!-- icon link -->
+    <!-- icon link  to include icons in our page-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 </head>
@@ -42,16 +37,16 @@ $Id = $_SESSION['user']
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">FAQS</a>
+                        <a class="nav-link" href="#FAQS">FAQS</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contacts</a>
+                        <a class="nav-link" href="#contacts">Contacts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="#reviews">Reviews</a>
                     </li>
                     <li class="btn btn-danger d-flex p-2">
                         <a class="text-light text-decoration-none" href="logout.php">Logout </a>
@@ -70,8 +65,9 @@ $Id = $_SESSION['user']
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">How To Update Your Log Book</h5>
-                        <h5><?php echo $Id  ?></h5>
+                        <h5><?php echo $_SESSION['user']; ?></h5>
                         <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        <p>To fill out the logbook of attachment, diligently record daily activities, tasks, and reflections during your attachment period. Include details such as dates, project insights, and skills acquired. Ensure accuracy, consistency, and adherence to any specific guidelines provided by your supervisor or institution for a comprehensive and valuable record.</p>
                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
@@ -81,43 +77,49 @@ $Id = $_SESSION['user']
             </div>
         </div>
     </div>
-
-    <!-- text  -->
-    
+   
 
     <div class="container mt-3">
         <div class="row ">
             <?php  
+            require_once  "connect.php";
+            $id =$_SESSION['user'];
+            $sql = "SELECT * FROM Users where id=$id";
+            $result = mysqli_query($conn, $sql); // Assuming $conn is your database connection variable
+            
+            // Check if the query was successful
+                if ($result) {
+                    $row = mysqli_fetch_assoc($result);
+                    // $id = $row['id'];
+                }
+
                 if(isset($_POST['submit'])){
                     $day = $_POST['day'];
                     $date = $_POST['date'];
                     $week = $_POST['week'];
                     $text_input = $_POST['text_input'];
+                    $id =$_SESSION['user'];
 
-                    // session from database users
-                    $users_id = $Id;
-
-                    // prepare sql statement with placeholder
-                    require_once  "connect.php";
+                    // session from database users                    
 
                     $sql = "INSERT INTO Request (users_id,request_date,week,Day, Description) VALUES(?,?,?,?,?)";
                     $stmt = $conn->prepare($sql);
 
-                    $stmt->bind_param('sssss', $users_id,$date,$week,$day,$text_input);
+                    $stmt->bind_param('issss', $id,$date,$week,$day,$text_input);
 
                     if($stmt->execute()){
                         echo "<script> alert('Record added success')</script>";
                     }else{
                         echo "<script>alert('error '. $stmt->error)</script>";
                     }
-                    //close the connection
-                    $stmt->close();
-                    $conn->close();
+                    
+                   $conn->close();
                 }
             ?>
             <form method="POST" action="index.php">
                 <h3 class="mt-5 p-3 mb-3">
                     Record Todays Activity
+                    <?php  ?>
                 </h3>
                 <p class="m-2 b">please select the specific day and week in boxes provided</p>
                 <div class="row text-center">                
@@ -134,7 +136,7 @@ $Id = $_SESSION['user']
                             
                         </select>
                     </div>
-                    <!-- week selection -->
+                    <!-- week selection  by the student-->
                     <div class="col-md-4">
                         <select name="week" class="form-control text-center">
                             <option value="week1">Week1</option>
@@ -165,36 +167,39 @@ $Id = $_SESSION['user']
     <br>
   
     <br>
-     <div class="container mt-3">
+     <div class="container mt-3" id="reviews">
         <h4>Lecturers Reviews</h4>
         <div class="image">
         <p class="card-text">click the button to see the reviews your made by lecturers</p>
-            <a href="reviews.php" class="btn btn-success text-decoration-none">Show Reviews</a>
+            <a href="reviews.php?userid=<?php echo $id; ?>" class="btn btn-success text-decoration-none">Show Reviews</a>
         </div>
     </div>
 
     <br>
 
     <!-- About Us section -->
-    <div class="container cont mb-5">
+    <div class="container cont mb-5" id="about">
         <h3>About Us</h3>
         <div class="card">
             <div class="row g-0">
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">We Help The Students To Record Their Details With Ease</h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                        <p class="card-text">The 'About Us' section of our logbook updating system provides insight
+                             into our commitment to efficient record management.
+                              We highlight our team's dedication to developing user-friendly interfaces, ensuring seamless navigation. Learn about our mission to streamline the logging process, enhance data accuracy,
+                             and empower users with robust tools for comprehensive and hassle-free record keeping.</p>
                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <img src="images/student-849825.jpg" alt="Image" class="img-fluid">
+                    <img src="images/workspace-766045.jpg" alt="Image" class="img-fluid">
                 </div>
             </div>
         </div>
     </div>
-    <!-- contacts section -->
-    <div class="container mt-5">
+    <!-- contacts section to show how a person can reach to us -->
+    <div class="container mt-5" id="contacts">
   <div class="row d-flex">
     <div class="col-md-12 mx-auto">
       <div class="card">
@@ -214,10 +219,7 @@ $Id = $_SESSION['user']
             <h5>Contact Name: Student</h5>
             <p>Email: student@example.com</p>
             <p>Phone: +254 7654321</p>
-          </div>
-
-          <!-- Add more contacts as needed -->
-
+            </div>
         </div>
       </div>
     </div>
@@ -225,7 +227,7 @@ $Id = $_SESSION['user']
 </div>
 
     <!-- frequently asked  questions section -->
-    <div class="container mt-5">
+    <div class="container mt-5" id="FAQS">
         <div class="row">
             <h2>FAQS</h2>
             <div class="col-md-4">
@@ -262,7 +264,7 @@ $Id = $_SESSION['user']
     <!-- footer section -->
     <footer>
         <div class="container">
-            <p>&copy; 2024 Your Company. All rights reserved.</p>
+            <p>&copy; 2024 Students Logbook record. All rights reserved.</p>
         </div>
     </footer>
 
